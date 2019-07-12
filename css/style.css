@@ -1,0 +1,35 @@
+.outputbox{
+    height:600px;
+    width:50%;
+}
+#input{
+    width:50%;
+}
+#command{
+    display:inline-block;
+    width:70%;
+    margin:0;
+    padding:0;
+}
+#confirm{
+    display: inline-block;
+    width:9%;
+    margin:0;
+    padding:0;
+    color:white;
+    background-color: #777777;
+}
+#confirm:hover{
+    background-color: #555555;
+}
+#confirm:active{
+    background-color: #333333;
+}
+#prefix{
+    display: inline-block;
+    width:20%;
+    margin:0;
+    padding:0;
+    color:white;
+    background-color: #777777;
+}
