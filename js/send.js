@@ -23,7 +23,7 @@ function send(){
     data=JSON.parse(ajaxhttp.responseText);
     out="";
     if(data["error"]==1){
-        out="ERROR:"+data["msg"];
+        out="ERROR:"+data["msg"]+"<br>";
     }else{
         if(data["isstatus"]==1){
             changePrefix(data["status"]+">");

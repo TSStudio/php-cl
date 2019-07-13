@@ -1,5 +1,5 @@
 <?php
-class Rcon{
+class rcon{
     private $host;
     private $port;
     private $password;
@@ -92,6 +92,7 @@ class Rcon{
         $packet_pack = unpack('V1id/V1type/a*body', $packet_data);
         return $packet_pack;
     }
+    public static $help='\\- rcon connect &lt;地址&gt; &lt;端口&gt; &lt;密码&gt; - 连接到rcon服务器<br>\\- 内部使用:<br>&nbsp;&nbsp;&nbsp;&nbsp;\\-disconnect - 断开连接';
 }
 function mcolor($str){
     $str=str_replace("\n","<br>",$str);
@@ -107,53 +108,55 @@ function mcolor($str){
     }
     return $out;
 }
-if(empty($_SESSION["status"])){
-    //未登录情况
-    if($cmdarr[1]=="connect"){
-        if(count($cmdarr)!=5){
-            //如果格式不对
-            $error=true;
-            $errcode="参数错误！使用方法: rcon connect &lt;地址&gt; &lt;端口&gt; &lt;密码&gt;";
-        }else{
-            //尝试连接
-            $rcon = new Rcon($cmdarr[2], $cmdarr[3], $cmdarr[4], 3);
-            if ($rcon->connect()){
-                $msg="成功连接到服务器<br>你现在在Rcon模式下，用 \"disconnect\"来断开连接<br>";
-                $_SESSION["status"]="rcon";
-                $_SESSION["rhost"]=$cmdarr[2];
-                $_SESSION["rport"]=$cmdarr[3];
-                $_SESSION["rpass"]=$cmdarr[4];
-            }else{
-                //连不上
+if(!isset($help)){
+    if(empty($_SESSION["status"])){
+        //未登录情况
+        if($cmdarr[1]=="connect"){
+            if(count($cmdarr)!=5){
+                //如果格式不对
                 $error=true;
-                $errcode="连不上服务器，请检查参数";
+                $errcode="参数错误！使用方法: rcon connect &lt;地址&gt; &lt;端口&gt; &lt;密码&gt;";
+            }else{
+                //尝试连接
+                $rcon = new rcon($cmdarr[2], $cmdarr[3], $cmdarr[4], 3);
+                if ($rcon->connect()){
+                    $msg="成功连接到服务器<br>你现在在Rcon模式下，用 \"disconnect\"来断开连接<br>";
+                    $_SESSION["status"]="rcon";
+                    $_SESSION["rhost"]=$cmdarr[2];
+                    $_SESSION["rport"]=$cmdarr[3];
+                    $_SESSION["rpass"]=$cmdarr[4];
+                }else{
+                    //连不上
+                    $error=true;
+                    $errcode="连不上服务器，请检查参数";
+                }
             }
+        }else{
+            $error=true;
+            $errcode="参数 \"".$cmdarr[1]."\"未找到！使用方法: rcon connect &lt;地址&gt; &lt;端口&gt; &lt;密码&gt;";
         }
     }else{
-        $error=true;
-        $errcode="参数 \"".$cmdarr[1]."\"未找到！使用方法: rcon connect &lt;地址&gt; &lt;端口&gt; &lt;密码&gt;";
-    }
-}else{
-    //已登录
-    if($cmdarr[0]=="disconnect"){
-        $_SESSION["status"]="";
-        $_SESSION["rhost"]="";
-        $_SESSION["rport"]="";
-        $_SESSION["rpass"]="";
-        $msg="已断开";
-    }else{
-        //尝试连接
-        $rcon = new Rcon($_SESSION["rhost"], $_SESSION["rport"], $_SESSION["rpass"], 3);
-        if ($rcon->connect()){
-            $msg=$rcon->sendCommand($cmd);
-            $msg=mcolor($msg);
-        }else{
-            $error=true;
+        //已登录
+        if($cmdarr[0]=="disconnect"){
             $_SESSION["status"]="";
             $_SESSION["rhost"]="";
             $_SESSION["rport"]="";
             $_SESSION["rpass"]="";
-            $errcode="连接不到服务器，已断开";
+            $msg="已断开";
+        }else{
+            //尝试连接
+            $rcon = new rcon($_SESSION["rhost"], $_SESSION["rport"], $_SESSION["rpass"], 3);
+            if ($rcon->connect()){
+                $msg=$rcon->sendCommand($cmd);
+                $msg=mcolor($msg);
+            }else{
+                $error=true;
+                $_SESSION["status"]="";
+                $_SESSION["rhost"]="";
+                $_SESSION["rport"]="";
+                $_SESSION["rpass"]="";
+                $errcode="连接不到服务器，已断开";
+            }
         }
     }
 }
