@@ -1,18 +1,4 @@
 <?php
-/*需求:
-help h -列出所有命令
-
-rcon:
-rcon connect <HOST> <PORT> <password>
-INNER:
-disconnect
-
-query:
-
-query blocks <fromtime(理论上只要你中间没空格就可以，全英文，例如 18:00,June13th,2019 )> <totime> [ASC|DESC] [LIMIT]
-query chat <playerid>
-
-*/
 //include "include/auth.php";
 //此页面必须加入权限验证！
 if(!empty($_SESSION["status"])){
