@@ -1,9 +1,9 @@
 .outputbox{
     height:600px;
-    width:50%;
+    width:100%;
 }
 #input{
-    width:50%;
+    width:100%;
 }
 #command{
     display:inline-block;
@@ -32,4 +32,9 @@
     padding:0;
     color:white;
     background-color: #777777;
+}
+*{
+    background-color: #333333;
+    font-family: 'Courier New', Courier, monospace;
+    color:#CCCCCC;
 }
